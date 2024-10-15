@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import {
   useReactTable,
   getCoreRowModel,
@@ -15,50 +15,171 @@ interface EventTableProps {
 }
 
 const EventTable = ({ events, updateEvent, deleteEvent }: EventTableProps) => {
-  const columns = useMemo<ColumnDef<Event, any>[]>(
+  const [editingRow, setEditingRow] = useState<number | null>(null);
+  const [editedEvent, setEditedEvent] = useState<Event | null>(null);
+
+  const handleEditClick = (row: Event) => {
+    setEditingRow(row.id);
+    setEditedEvent(row);
+  };
+
+  const handleSave = () => {
+    if (editedEvent) {
+      updateEvent(editedEvent);
+      setEditingRow(null);
+      setEditedEvent(null);
+    }
+  };
+
+  const handleCancel = () => {
+    setEditingRow(null);
+    setEditedEvent(null);
+  };
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>, field: keyof Event) => {
+    if (editedEvent) {
+      setEditedEvent({ ...editedEvent, [field]: e.target.value });
+    }
+  };
+
+  const columns = useMemo<ColumnDef<Event, string>[]>(
     () => [
       {
         header: 'Name',
         accessorKey: 'name',
+        cell: ({ row }) => {
+          const isEditing = editingRow === row.original.id;
+          return isEditing ? (
+            <input
+              value={editedEvent?.name || ''}
+              onChange={(e) => handleChange(e, 'name')}
+              className="border border-gray-300 rounded-md p-1"
+            />
+          ) : (
+            row.original.name
+          );
+        },
       },
       {
         header: 'Description',
         accessorKey: 'description',
+        cell: ({ row }) => {
+          const isEditing = editingRow === row.original.id;
+          return isEditing ? (
+            <input
+              value={editedEvent?.description || ''}
+              onChange={(e) => handleChange(e, 'description')}
+              className="border border-gray-300 rounded-md p-1"
+            />
+          ) : (
+            row.original.description
+          );
+        },
       },
       {
         header: 'Category',
         accessorKey: 'category',
+        cell: ({ row }) => {
+          const isEditing = editingRow === row.original.id;
+          return isEditing ? (
+            <select
+              name="category"
+              value={editedEvent?.category || ''}
+              onChange={(e: any) => handleChange(e, 'category')}
+              className="border border-gray-300 p-2 mb-2 rounded-md mr-2 w-52"
+              style={{ height: '45px' }}
+            >
+              <option value="work">Work</option>
+              <option value="personal">Personal</option>
+              <option value="leisure">Leisure</option>
+            </select>
+          ) : (
+            row.original.category
+          );
+        },
       },
       {
         header: 'Date',
         accessorKey: 'date',
-        cell: ({ getValue }) => new Date(getValue() as string).toLocaleDateString(),
+        cell: ({ row }) => {
+          const isEditing = editingRow === row.original.id;
+          return isEditing ? (
+            <input
+              type="date"
+              value={editedEvent ? new Date(editedEvent.date).toISOString().substr(0, 10) : ''}
+              onChange={(e) => handleChange(e, 'date')}
+              className="border border-gray-300 rounded-md p-1"
+            />
+          ) : (
+            new Date(row.original.date).toLocaleDateString()
+          );
+        },
       },
       {
         header: 'Status',
         accessorKey: 'status',
+        cell: ({ row }) => {
+          const isEditing = editingRow === row.original.id;
+          return isEditing ? (
+            <select
+              name="category"
+              value={editedEvent?.status || ''}
+              onChange={(e: any) => handleChange(e, 'status')}
+              className="border border-gray-300 p-2 mb-2 rounded-md mr-2 w-52"
+              style={{ height: '45px' }}
+            >
+              <option value="upcoming">upcoming</option>
+              <option value="completed">completed</option>
+              <option value="cancelled">cancelled</option>
+            </select>
+          ) : (
+            row.original.status
+          );
+        },
       },
       {
         header: 'Actions',
-        cell: ({ row }) => (
-          <div>
-            <button
-              onClick={() => updateEvent(row.original)}
-              className="text-teal-600 hover:text-teal-800 font-semibold"
-            >
-              Edit
-            </button>
-            <button
-              onClick={() => deleteEvent(row.original.id)}
-              className="text-red-500 hover:text-red-700 font-semibold ml-2"
-            >
-              Delete
-            </button>
-          </div>
-        ),
+        cell: ({ row }) => {
+          const isEditing = editingRow === row.original.id;
+          return (
+            <div>
+              {isEditing ? (
+                <>
+                  <button
+                    onClick={handleSave}
+                    className="text-teal-600 hover:text-teal-800 font-semibold"
+                  >
+                    Save
+                  </button>
+                  <button
+                    onClick={handleCancel}
+                    className="text-gray-500 hover:text-gray-700 font-semibold ml-2"
+                  >
+                    Cancel
+                  </button>
+                </>
+              ) : (
+                <>
+                  <button
+                    onClick={() => handleEditClick(row.original)}
+                    className="text-teal-600 hover:text-teal-800 font-semibold"
+                  >
+                    Edit
+                  </button>
+                  <button
+                    onClick={() => deleteEvent(row.original.id)}
+                    className="text-red-500 hover:text-red-700 font-semibold ml-2"
+                  >
+                    Delete
+                  </button>
+                </>
+              )}
+            </div>
+          );
+        },
       },
     ],
-    [updateEvent, deleteEvent]
+    [editingRow, editedEvent]
   );
 
   const table = useReactTable({
