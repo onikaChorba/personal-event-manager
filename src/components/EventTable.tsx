@@ -7,6 +7,7 @@ import {
   flexRender,
 } from '@tanstack/react-table';
 import { Event } from '../types/eventTypes';
+import EventDetailsModal from './EventDetailsModal';
 
 interface EventTableProps {
   events: Event[];
@@ -21,6 +22,9 @@ const EventTable = ({ events, updateEvent, deleteEvent }: EventTableProps) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string | 'all'>('all');
   const [selectedStatus, setSelectedStatus] = useState<string | 'all'>('all');
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
 
   const handleEditClick = (row: Event) => {
     setEditingRow(row.id);
@@ -45,6 +49,7 @@ const EventTable = ({ events, updateEvent, deleteEvent }: EventTableProps) => {
       setEditedEvent({ ...editedEvent, [field]: e.target.value });
     }
   };
+
   const filteredEvents = useMemo(() => {
     return events.filter((event) => {
       const matchesSearch =
@@ -57,6 +62,16 @@ const EventTable = ({ events, updateEvent, deleteEvent }: EventTableProps) => {
       return matchesSearch && matchesCategory && matchesStatus;
     });
   }, [events, searchQuery, selectedCategory, selectedStatus]);
+
+  const openModal = (event: Event) => {
+    setSelectedEvent(event);
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setSelectedEvent(null);
+  };
 
   const columns = useMemo<ColumnDef<Event, string>[]>(
     () => [
@@ -72,7 +87,9 @@ const EventTable = ({ events, updateEvent, deleteEvent }: EventTableProps) => {
               className="border border-gray-300 rounded-md p-1"
             />
           ) : (
-            row.original.name
+            <span className="cursor-pointer text-teal-600" onClick={() => openModal(row.original)}>
+              {row.original.name}
+            </span>
           );
         },
       },
@@ -208,6 +225,9 @@ const EventTable = ({ events, updateEvent, deleteEvent }: EventTableProps) => {
 
   return (
     <div className="flex flex-col h-full">
+      {isModalOpen && selectedEvent && (
+        <EventDetailsModal event={selectedEvent} onClose={closeModal} />
+      )}
       <div className="flex mb-4">
         <input
           type="text"

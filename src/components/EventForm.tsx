@@ -25,12 +25,12 @@ const EventForm = ({ addEvent }: { addEvent: (event: Event) => void }) => {
         category: values.category as 'work' | 'personal' | 'leisure',
         status: 'upcoming',
       });
+      formik.resetForm();
     },
   });
 
   return (
     <form onSubmit={formik.handleSubmit} className="mb-4 p-6 bg-white rounded-lg shadow-lg max-w-full mx-auto flex items-center flex-wrap">
-
       <div className='relative'>
         <input
           type="text"
