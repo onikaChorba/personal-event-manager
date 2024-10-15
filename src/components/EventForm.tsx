@@ -31,7 +31,7 @@ const EventForm = ({ addEvent }: { addEvent: (event: Event) => void }) => {
   return (
     <form onSubmit={formik.handleSubmit} className="mb-4 p-6 bg-white rounded-lg shadow-lg max-w-full mx-auto flex items-center flex-wrap">
 
-      <div>
+      <div className='relative'>
         <input
           type="text"
           name="name"
@@ -40,8 +40,8 @@ const EventForm = ({ addEvent }: { addEvent: (event: Event) => void }) => {
           onChange={formik.handleChange}
           className="border border-gray-300 p-2 mb-2 rounded-md mr-2"
         />
-        {/* {formik.errors.name && <div className="text-red-500 mb-2">{formik.errors.name}</div>
-        } */}
+        {formik.errors.name && <div className="text-red-500 mb-2 absolute top-11">{formik.errors.name}</div>
+        }
       </div>
       <textarea
         name="description"
@@ -64,7 +64,7 @@ const EventForm = ({ addEvent }: { addEvent: (event: Event) => void }) => {
         <option value="leisure">Leisure</option>
       </select>
 
-      <div>
+      <div className='relative'>
         <input
           type="date"
           name="date"
@@ -72,9 +72,9 @@ const EventForm = ({ addEvent }: { addEvent: (event: Event) => void }) => {
           onChange={formik.handleChange}
           className="border border-gray-300 p-2 mb-2 rounded-md mr-2"
         />
-        {/* {
-          formik.errors.date && <div className="text-red-500 mb-2">{formik.errors.date}</div>
-        } */}
+        {
+          formik.errors.date && <div className="text-red-500 mb-2 absolute top-11">{formik.errors.date}</div>
+        }
         <button type="submit" className="bg-teal-500 text-white p-2 pl-10 pr-10 rounded-md hover:bg-teal-600 transition duration-200 " style={{ height: '45px' }}>
           Add Event
         </button>

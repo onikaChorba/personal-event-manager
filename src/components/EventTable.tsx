@@ -18,6 +18,10 @@ const EventTable = ({ events, updateEvent, deleteEvent }: EventTableProps) => {
   const [editingRow, setEditingRow] = useState<number | null>(null);
   const [editedEvent, setEditedEvent] = useState<Event | null>(null);
 
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState<string | 'all'>('all');
+  const [selectedStatus, setSelectedStatus] = useState<string | 'all'>('all');
+
   const handleEditClick = (row: Event) => {
     setEditingRow(row.id);
     setEditedEvent(row);
@@ -41,6 +45,18 @@ const EventTable = ({ events, updateEvent, deleteEvent }: EventTableProps) => {
       setEditedEvent({ ...editedEvent, [field]: e.target.value });
     }
   };
+  const filteredEvents = useMemo(() => {
+    return events.filter((event) => {
+      const matchesSearch =
+        event.name.toLowerCase().includes(searchQuery.toLowerCase());
+      const matchesCategory =
+        selectedCategory === 'all' || event.category === selectedCategory;
+      const matchesStatus =
+        selectedStatus === 'all' || event.status === selectedStatus;
+
+      return matchesSearch && matchesCategory && matchesStatus;
+    });
+  }, [events, searchQuery, selectedCategory, selectedStatus]);
 
   const columns = useMemo<ColumnDef<Event, string>[]>(
     () => [
@@ -183,7 +199,7 @@ const EventTable = ({ events, updateEvent, deleteEvent }: EventTableProps) => {
   );
 
   const table = useReactTable({
-    data: events,
+    data: filteredEvents,
     columns,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
@@ -192,6 +208,35 @@ const EventTable = ({ events, updateEvent, deleteEvent }: EventTableProps) => {
 
   return (
     <div className="flex flex-col h-full">
+      <div className="flex mb-4">
+        <input
+          type="text"
+          placeholder="Search by name..."
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          className="border border-gray-300 rounded-md p-2 mr-2 flex-1"
+        />
+        <select
+          value={selectedCategory}
+          onChange={(e) => setSelectedCategory(e.target.value)}
+          className="border border-gray-300 rounded-md p-2 mr-2"
+        >
+          <option value="all">All Categories</option>
+          <option value="work">Work</option>
+          <option value="personal">Personal</option>
+          <option value="leisure">Leisure</option>
+        </select>
+        <select
+          value={selectedStatus}
+          onChange={(e) => setSelectedStatus(e.target.value)}
+          className="border border-gray-300 rounded-md p-2"
+        >
+          <option value="all">All Statuses</option>
+          <option value="upcoming">Upcoming</option>
+          <option value="completed">Completed</option>
+          <option value="cancelled">Cancelled</option>
+        </select>
+      </div>
       <div className="flex-grow min-h-[460px] max-h-[460px] overflow-y-auto relative">
         <table className="w-full border border-gray-200 shadow-md rounded-lg">
           <thead className="bg-teal-600 text-white sticky top-0 z-10">
