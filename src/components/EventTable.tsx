@@ -8,6 +8,9 @@ import {
 } from '@tanstack/react-table';
 import { Event } from '../types/eventTypes';
 import EventDetailsModal from './EventDetailsModal';
+import { Input } from './common/Input';
+import { Textarea } from './common/Textarea';
+import { Select } from './common/Select';
 
 interface EventTableProps {
   events: Event[];
@@ -48,7 +51,7 @@ const EventTable = ({ events, updateEvent, deleteEvent }: EventTableProps) => {
   }, []);
 
   const handleChange = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>, field: keyof Event) => {
+    (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>, field: keyof Event) => {
       if (editedEvent) {
         setEditedEvent({ ...editedEvent, [field]: e.target.value });
       }
@@ -93,11 +96,11 @@ const EventTable = ({ events, updateEvent, deleteEvent }: EventTableProps) => {
         cell: ({ row }) => {
           const isEditing = editingRow === row.original.id;
           return isEditing ? (
-            <input
+            <Input
+              name='name'
+              type="name"
               value={editedEvent?.name || ''}
-              onChange={(e) => handleChange(e, 'name')}
-              className="border border-gray-300 rounded-md p-1"
-            />
+              onChange={(e) => handleChange(e, 'name')} />
           ) : (
             <span className="cursor-pointer text-teal-600" onClick={() => openModal(row.original)}>
               {row.original.name}
@@ -111,11 +114,10 @@ const EventTable = ({ events, updateEvent, deleteEvent }: EventTableProps) => {
         cell: ({ row }) => {
           const isEditing = editingRow === row.original.id;
           return isEditing ? (
-            <input
+            <Textarea
+              name='description'
               value={editedEvent?.description || ''}
-              onChange={(e) => handleChange(e, 'description')}
-              className="border border-gray-300 rounded-md p-1"
-            />
+              onChange={(e) => handleChange(e, 'description')} />
           ) : (
             row.original.description
           );
@@ -127,17 +129,16 @@ const EventTable = ({ events, updateEvent, deleteEvent }: EventTableProps) => {
         cell: ({ row }) => {
           const isEditing = editingRow === row.original.id;
           return isEditing ? (
-            <select
+            <Select
               name="category"
               value={editedEvent?.category || ''}
               onChange={(e: any) => handleChange(e, 'category')}
-              className="border border-gray-300 p-2 mb-2 rounded-md mr-2 w-52"
-              style={{ height: '45px' }}
-            >
-              <option value="work">Work</option>
-              <option value="personal">Personal</option>
-              <option value="leisure">Leisure</option>
-            </select>
+              options={[
+                { value: 'work', label: 'Work' },
+                { value: 'personal', label: 'Personal' },
+                { value: 'leisure', label: 'Leisure' },
+              ]}
+            />
           ) : (
             row.original.category
           );
@@ -149,12 +150,11 @@ const EventTable = ({ events, updateEvent, deleteEvent }: EventTableProps) => {
         cell: ({ row }) => {
           const isEditing = editingRow === row.original.id;
           return isEditing ? (
-            <input
+            <Input
+              name='data'
               type="date"
               value={editedEvent ? new Date(editedEvent.date).toISOString().substr(0, 10) : ''}
-              onChange={(e) => handleChange(e, 'date')}
-              className="border border-gray-300 rounded-md p-1"
-            />
+              onChange={(e) => handleChange(e, 'date')} />
           ) : (
             new Date(row.original.date).toLocaleDateString()
           );
@@ -166,17 +166,16 @@ const EventTable = ({ events, updateEvent, deleteEvent }: EventTableProps) => {
         cell: ({ row }) => {
           const isEditing = editingRow === row.original.id;
           return isEditing ? (
-            <select
-              name="category"
+            <Select
+              name="status"
               value={editedEvent?.status || ''}
               onChange={(e: any) => handleChange(e, 'status')}
-              className="border border-gray-300 p-2 mb-2 rounded-md mr-2 w-52"
-              style={{ height: '45px' }}
-            >
-              <option value="upcoming">upcoming</option>
-              <option value="completed">completed</option>
-              <option value="cancelled">cancelled</option>
-            </select>
+              options={[
+                { value: 'upcoming', label: 'Upcoming' },
+                { value: 'completed', label: 'Completed' },
+                { value: 'cancelled', label: 'Cancelled' },
+              ]}
+            />
           ) : (
             row.original.status
           );
@@ -241,42 +240,44 @@ const EventTable = ({ events, updateEvent, deleteEvent }: EventTableProps) => {
         <EventDetailsModal event={selectedEvent} onClose={closeModal} />
       )}
       <div className="flex mb-4">
-        <input
+        <Input
+          name='data'
           type="text"
           placeholder="Search by name..."
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          className="border border-gray-300 rounded-md p-2 mr-2 flex-1"
-        />
-        <select
+          className='flex-1' />
+        <Select
+          name="create data event"
           value={sortOrder}
           onChange={(e) => setSortOrder(e.target.value as 'newest' | 'oldest')}
-          className="border border-gray-300 rounded-md p-2 ml-2 mr-2"
-        >
-          <option value="newest">New</option>
-          <option value="oldest">Old</option>
-        </select>
-
-        <select
+          options={[
+            { value: 'newest', label: 'New' },
+            { value: 'oldest', label: 'Old' },
+          ]}
+        />
+        <Select
+          name="category"
           value={selectedCategory}
           onChange={(e) => setSelectedCategory(e.target.value)}
-          className="border border-gray-300 rounded-md p-2 mr-2"
-        >
-          <option value="all">All Categories</option>
-          <option value="work">Work</option>
-          <option value="personal">Personal</option>
-          <option value="leisure">Leisure</option>
-        </select>
-        <select
+          options={[
+            { value: 'all', label: 'All Categories' },
+            { value: 'work', label: 'Work' },
+            { value: 'personal', label: 'Personal' },
+            { value: 'leisure', label: 'Leisure' },
+          ]}
+        />
+        <Select
+          name="status"
           value={selectedStatus}
           onChange={(e) => setSelectedStatus(e.target.value)}
-          className="border border-gray-300 rounded-md p-2"
-        >
-          <option value="all">All Statuses</option>
-          <option value="upcoming">Upcoming</option>
-          <option value="completed">Completed</option>
-          <option value="cancelled">Cancelled</option>
-        </select>
+          options={[
+            { value: 'all', label: 'All Statuses' },
+            { value: 'upcoming', label: 'Upcoming' },
+            { value: 'completed', label: 'Completed' },
+            { value: 'cancelled', label: 'Cancelled' },
+          ]}
+        />
       </div>
       <div className="flex-grow min-h-[460px] max-h-[460px] overflow-y-auto relative">
         <table className="w-full border border-gray-200 shadow-md rounded-lg">
@@ -347,6 +348,7 @@ const EventTable = ({ events, updateEvent, deleteEvent }: EventTableProps) => {
             table.setPageSize(Number(e.target.value));
           }}
           className="border border-gray-300 rounded-md p-2"
+          style={{ height: '45px' }}
         >
           {[10, 20, 30, 40, 50].map((pageSize) => (
             <option key={pageSize} value={pageSize}>
