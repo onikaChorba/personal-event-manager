@@ -33,7 +33,7 @@ const EventForm = ({ addEvent }: { addEvent: (event: Event) => void }) => {
   });
 
   return (
-    <form onSubmit={formik.handleSubmit} className="mb-4 p-6 bg-white rounded-lg shadow-lg max-w-full mx-auto flex items-center flex-wrap">
+    <form onSubmit={formik.handleSubmit} className="mb-4 p-6 bg-white rounded-lg shadow-lg max-w-full mx-auto flex items-center flex-wrap gap-2">
       <Input
         type='text'
         name="name"

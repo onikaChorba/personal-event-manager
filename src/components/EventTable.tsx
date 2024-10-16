@@ -247,7 +247,7 @@ const EventTable = ({ events, isLoading, updateEvent, deleteEvent }: EventTableP
           placeholder="Search by name..."
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          className='flex-1 ml-2' />
+          className='flex-1 ml-2 min-w-[200px]' />
         <Select
           name="create data event"
           value={sortOrder}
@@ -280,8 +280,8 @@ const EventTable = ({ events, isLoading, updateEvent, deleteEvent }: EventTableP
           ]}
         />
       </div>
-      <div className="flex-grow min-h-[460px] max-h-[460px] overflow-y-auto relative">
-        <table className="w-full border border-gray-200 shadow-md rounded-lg">
+      <div className="flex-grow min-h-[460px] max-h-[460px] overflow-y-auto relative overflow-x-auto">
+        <table className="w-full border border-gray-200 shadow-md rounded-lg table-auto sm:table-fixed">
           <thead className="bg-teal-600 text-white sticky top-0 z-10">
             {table.getHeaderGroups().map((headerGroup) => (
               <tr key={headerGroup.id}>
@@ -324,8 +324,8 @@ const EventTable = ({ events, isLoading, updateEvent, deleteEvent }: EventTableP
           </tbody>
         </table>
       </div>
-      <div className="pagination mt-4 flex justify-between items-center py-2">
-        <div>
+      <div className="pagination mt-4 flex flex-col sm:flex-row justify-between items-center py-2 gap-2">
+        <div className="flex justify-between w-full sm:w-auto">
           <button
             onClick={() => table.previousPage()}
             disabled={!table.getCanPreviousPage()}

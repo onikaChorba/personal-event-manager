@@ -14,7 +14,7 @@ export const Textarea: React.FC<ITextarea> = ({ name, value, placeholder, onChan
       placeholder={placeholder}
       value={value}
       onChange={onChange}
-      className="border border-gray-300 p-2 rounded-md mr-2 resize-none flex-1"
+      className="border border-gray-300 p-2 rounded-md mr-2 resize-none flex-1 min-w-[200px]"
       rows={1}
     />
   )
