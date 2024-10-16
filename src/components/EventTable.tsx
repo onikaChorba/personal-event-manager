@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useState, useCallback } from 'react';
 import {
   useReactTable,
   getCoreRowModel,
@@ -34,27 +34,29 @@ const EventTable = ({ events, updateEvent, deleteEvent }: EventTableProps) => {
     setEditedEvent(row);
   };
 
-  const handleSave = () => {
+  const handleSave = useCallback(() => {
     if (editedEvent) {
       updateEvent(editedEvent);
       setEditingRow(null);
       setEditedEvent(null);
     }
-  };
+  }, [editedEvent, updateEvent]);
 
-  const handleCancel = () => {
+  const handleCancel = useCallback(() => {
     setEditingRow(null);
     setEditedEvent(null);
-  };
+  }, []);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>, field: keyof Event) => {
-    if (editedEvent) {
-      setEditedEvent({ ...editedEvent, [field]: e.target.value });
-    }
-  };
+  const handleChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>, field: keyof Event) => {
+      if (editedEvent) {
+        setEditedEvent({ ...editedEvent, [field]: e.target.value });
+      }
+    },
+    [editedEvent]
+  );
 
   const filteredEvents = useMemo(() => {
-    // Фільтрація подій
     const filtered = events.filter((event) => {
       const matchesSearch =
         event.name.toLowerCase().includes(searchQuery.toLowerCase());
@@ -66,7 +68,6 @@ const EventTable = ({ events, updateEvent, deleteEvent }: EventTableProps) => {
       return matchesSearch && matchesCategory && matchesStatus;
     });
 
-    // Сортування фільтрованих подій за датою
     return filtered.sort((a, b) => {
       const dateA = new Date(a.date).getTime();
       const dateB = new Date(b.date).getTime();
@@ -223,7 +224,7 @@ const EventTable = ({ events, updateEvent, deleteEvent }: EventTableProps) => {
         },
       },
     ],
-    [editingRow, editedEvent]
+    [editingRow, editedEvent, deleteEvent, handleChange, handleSave, handleCancel]
   );
 
   const table = useReactTable({
