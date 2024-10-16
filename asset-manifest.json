@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/personal-event-manager/static/css/main.87f2afa4.css",
-    "main.js": "/personal-event-manager/static/js/main.5376b6ce.js",
+    "main.css": "/personal-event-manager/static/css/main.571bd232.css",
+    "main.js": "/personal-event-manager/static/js/main.b278b707.js",
     "static/js/453.169364a1.chunk.js": "/personal-event-manager/static/js/453.169364a1.chunk.js",
     "index.html": "/personal-event-manager/index.html",
-    "main.87f2afa4.css.map": "/personal-event-manager/static/css/main.87f2afa4.css.map",
-    "main.5376b6ce.js.map": "/personal-event-manager/static/js/main.5376b6ce.js.map",
+    "main.571bd232.css.map": "/personal-event-manager/static/css/main.571bd232.css.map",
+    "main.b278b707.js.map": "/personal-event-manager/static/js/main.b278b707.js.map",
     "453.169364a1.chunk.js.map": "/personal-event-manager/static/js/453.169364a1.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.87f2afa4.css",
-    "static/js/main.5376b6ce.js"
+    "static/css/main.571bd232.css",
+    "static/js/main.b278b707.js"
   ]
 }
