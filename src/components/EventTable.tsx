@@ -22,9 +22,12 @@ const EventTable = ({ events, updateEvent, deleteEvent }: EventTableProps) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string | 'all'>('all');
   const [selectedStatus, setSelectedStatus] = useState<string | 'all'>('all');
+  const [sortOrder, setSortOrder] = useState<'newest' | 'oldest'>('newest');
+
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
+
 
   const handleEditClick = (row: Event) => {
     setEditingRow(row.id);
@@ -51,7 +54,8 @@ const EventTable = ({ events, updateEvent, deleteEvent }: EventTableProps) => {
   };
 
   const filteredEvents = useMemo(() => {
-    return events.filter((event) => {
+    // Фільтрація подій
+    const filtered = events.filter((event) => {
       const matchesSearch =
         event.name.toLowerCase().includes(searchQuery.toLowerCase());
       const matchesCategory =
@@ -61,7 +65,14 @@ const EventTable = ({ events, updateEvent, deleteEvent }: EventTableProps) => {
 
       return matchesSearch && matchesCategory && matchesStatus;
     });
-  }, [events, searchQuery, selectedCategory, selectedStatus]);
+
+    // Сортування фільтрованих подій за датою
+    return filtered.sort((a, b) => {
+      const dateA = new Date(a.date).getTime();
+      const dateB = new Date(b.date).getTime();
+      return sortOrder === 'newest' ? dateB - dateA : dateA - dateB;
+    });
+  }, [events, searchQuery, selectedCategory, selectedStatus, sortOrder]);
 
   const openModal = (event: Event) => {
     setSelectedEvent(event);
@@ -236,6 +247,15 @@ const EventTable = ({ events, updateEvent, deleteEvent }: EventTableProps) => {
           onChange={(e) => setSearchQuery(e.target.value)}
           className="border border-gray-300 rounded-md p-2 mr-2 flex-1"
         />
+        <select
+          value={sortOrder}
+          onChange={(e) => setSortOrder(e.target.value as 'newest' | 'oldest')}
+          className="border border-gray-300 rounded-md p-2 ml-2 mr-2"
+        >
+          <option value="newest">New</option>
+          <option value="oldest">Old</option>
+        </select>
+
         <select
           value={selectedCategory}
           onChange={(e) => setSelectedCategory(e.target.value)}
