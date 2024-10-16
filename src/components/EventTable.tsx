@@ -14,11 +14,12 @@ import { Select } from './common/Select';
 
 interface EventTableProps {
   events: Event[];
+  isLoading: boolean;
   updateEvent: (event: Event) => void;
   deleteEvent: (id: number) => void;
 }
 
-const EventTable = ({ events, updateEvent, deleteEvent }: EventTableProps) => {
+const EventTable = ({ events, isLoading, updateEvent, deleteEvent }: EventTableProps) => {
   const [editingRow, setEditingRow] = useState<number | null>(null);
   const [editedEvent, setEditedEvent] = useState<Event | null>(null);
 
@@ -246,7 +247,7 @@ const EventTable = ({ events, updateEvent, deleteEvent }: EventTableProps) => {
           placeholder="Search by name..."
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          className='flex-1' />
+          className='flex-1 ml-2' />
         <Select
           name="create data event"
           value={sortOrder}
@@ -300,19 +301,26 @@ const EventTable = ({ events, updateEvent, deleteEvent }: EventTableProps) => {
           </thead>
 
           <tbody>
-            {table.getRowModel().rows.map((row, index) => (
-              <tr
-                key={row.id}
-                className={`border-t ${index % 2 === 0 ? 'bg-gray-50' : 'bg-white'
-                  } hover:bg-teal-50`}
-              >
-                {row.getVisibleCells().map((cell) => (
-                  <td key={cell.id} className="px-4 py-2 text-gray-700">
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                  </td>
-                ))}
+            {isLoading ? (
+              <tr>
+                <td colSpan={columns.length} className="text-center py-4">
+                  <div className="loading-spinner" />
+                </td>
               </tr>
-            ))}
+            ) : (
+              table.getRowModel().rows.map((row, index) => (
+                <tr
+                  key={row.id}
+                  className={`border-t ${index % 2 === 0 ? 'bg-gray-50' : 'bg-white'
+                    } hover:bg-teal-50`}
+                >
+                  {row.getVisibleCells().map((cell) => (
+                    <td key={cell.id} className="px-4 py-2 text-gray-700">
+                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                    </td>
+                  ))}
+                </tr>
+              )))}
           </tbody>
         </table>
       </div>
