@@ -1,70 +1,44 @@
-# Getting Started with Create React App
+#  🗓️ Personal Event Management Application
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Welcome to the Personal Event Management Application, a comprehensive **React-based** project designed to help users effectively manage their events. This application allows users to add, edit, delete, and sort events while providing advanced features such as filtering, pagination, and event status management. Built with modern web technologies, it ensures a seamless user experience with an intuitive interface and robust functionality.
 
-## Available Scripts
+## 🛠️ Used Methods and Tools
 
-In the project directory, you can run:
+### ⛳ Event Model
+The application uses a clear event model with the following fields:
+- **ID** (number): Unique identifier for each event.
+- **Name** (string): The title or name of the event.
+- **Description** (string): Brief details about the event.
+- **Category** (enum): Events are categorized as either "work", "personal", or "leisure".
+- **Date** (Date): The scheduled date of the event.
+- **Status** (enum): The event can be marked as "upcoming", "completed", or "cancelled".
 
-### `npm start`
+### 🎯 Features
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+- **Add Event**: Users can easily add new events through a clean and intuitive form. ✏️
+- **Edit Event**: Events can be updated with any changes to the name, description, category, or date. ✍️
+- **Delete Event**: Users can remove events they no longer need, simplifying event management. ❌
+- **Sorting**: Events can be sorted by name, date, or category, allowing for better organization. 📊
+- **Filtering**: Filter events by category (work, personal, leisure) or by status (upcoming, completed, cancelled) to view only relevant events. 🔍
+- **Pagination**: To handle large numbers of events, the application supports pagination using React Table, making event navigation easier. 📑
+- **Event Completion**: Users can mark events as completed, making it simple to track progress. ✅
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+### 🧪 Form Validation
+Form validation is implemented using Yup, ensuring that:
+- The event name is required.
+- The event date must be in the future, preventing past dates from being selected.
 
-### `npm test`
+### 💻 UI/UX Design
+- **Responsive Design:** Built with **Tailwind CSS**, the application features a clean and responsive user interface that adapts seamlessly to any screen size.
+- **Event Table:** Events are displayed in a table format, with columns for name, description, category, date, and status, providing users with an organized and easy-to-read view.
+- **User-Friendly** Forms: Adding and editing events is made simple with easy-to-use forms and real-time validation feedback.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+The application is designed to be responsive, ensuring that users on different devices (mobile, tablet, desktop) have a smooth and consistent experience.
 
-### `npm run build`
+### 🚀 Bonus Features
+- **Custom Hooks:** Implement custom hooks for managing event states and API requests, promoting clean and reusable logic.
+- **Event Details Modal:** When users click on an event, a modal appears displaying detailed event information for a better user experience.
+- **Search Functionality:** A search bar allows users to quickly find events by name, enhancing usability for large event lists.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+### 🔥 Deployment
+This project has been deployed on GitHub Pages, allowing users to access their personal event management system from anywhere with an internet connection.
